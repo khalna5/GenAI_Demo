@@ -1,16 +1,19 @@
-# Login and Dashboard Functionality with Playwright
+# Login, Dashboard, and Products Functionality with Playwright
 
-This project demonstrates how to implement and test login functionality and dashboard dropdown selection using Playwright.
+This project demonstrates how to implement and test login functionality, dashboard dropdown selection, order management, and product listing using Playwright.
 
 ## Project Structure
 
 - `/pages/login.js` - Page Object Model for the login page
 - `/pages/dashboard.js` - Page Object Model for the dashboard page
+- `/pages/products.js` - Page Object Model for the products page
 - `/tests/demo/login.spec.js` - Test cases for valid and invalid login scenarios
-- `/tests/demo/dashboard.spec.ts` - Test cases for dashboard dropdown functionality
-- `/tests/demo/order.spec.js` - Test cases for order placement
+- `/tests/demo/order.spec.js` - Test cases for order page functionality and dropdown selection
+- `/tests/demo/viewAllProduct.spec.js` - Test cases for the View all products page
 - `/tests/pages/login.ts` - Selectors for the login page elements
 - `/tests/pages/dashboard.ts` - Selectors for the dashboard page elements
+- `/tests/pages/orders.ts` - Selectors for the orders page elements
+- `/tests/pages/products.ts` - Selectors for the products page elements
 - `/tests/pages/app.ts` - Common selectors for the application
 
 ## Login Test Cases
@@ -25,15 +28,46 @@ The following test cases are implemented:
 6. **Invalid Login - Empty Username and Password** - Tests login with both fields empty
 7. **Logout Functionality** - Tests the logout process after a successful login
 
-## Dashboard Dropdown Test Cases
+## Products Page Test Cases
 
-The following dashboard dropdown test cases are implemented:
+The following product page test cases are implemented:
 
-1. **Verify Orders Table is Displayed** - Tests that the orders table is visible on the dashboard
-2. **Create Customer Dropdown from Table Data** - Tests creating a dropdown from the customer column
-3. **Create Product Dropdown from Table Data** - Tests creating a dropdown from the product column
-4. **Create Date Dropdown from Table Data** - Tests creating a dropdown from the date column
-5. **Filter Table by Selected Customer** - Tests filtering the table by selecting a customer from the dropdown
+1. **Navigate to View all products page** - Tests navigation to the products page and verifies the URL and page title
+2. **Display products table with correct headers** - Tests that the products table has the correct headers
+3. **Display correct product information** - Tests that the products table displays the correct product information
+4. **Verify product images are displayed** - Tests that product images are displayed and have proper attributes
+5. **Verify navigation between View all products and View all orders pages** - Tests navigation between the products and orders pages
+6. **Verify product details match when ordering the product** - Tests that product details on the products page match those on the order page
+7. **Verify all products can be ordered** - Tests that all products from the products page are available in the order dropdown
+8. **Verify product prices are numeric and properly formatted** - Tests that product prices are properly formatted
+9. **Verify product discounts are properly formatted as percentages** - Tests that product discounts are properly formatted
+
+## ProductsPage (`/pages/products.js`)
+
+The ProductsPage class provides the following methods:
+
+- `goToProductsPage()` - Navigates to the products page
+- `getAllProductNames()` - Gets all product names from the products table
+- `getAllProductPrices()` - Gets all product prices from the products table
+- `getAllProductDiscounts()` - Gets all product discounts from the products table
+- `getProductCount()` - Gets the number of products in the table
+- `getProductDetails(index)` - Gets product details by index
+- `getAllProductDetails()` - Gets all product details
+- `productExists(productName)` - Checks if a product exists in the table by name
+- `getPageTitle()` - Gets the page title text
+
+## Orders Page Test Cases
+
+The following order page test cases are implemented:
+
+1. **Go to List of Orders Page and Interact with All Dropdowns** - Tests navigating to the orders page and interacting with all available dropdowns
+2. **Go to List of Orders Page and Verify All Existing Dropdowns** - Tests navigating to the orders page and verifying all existing dropdowns
+
+The order.spec.js file implements the following functionality:
+1. Navigates to the List of Orders page
+2. Creates dynamic dropdowns for filtering based on table columns (Customer, Product, Date, Status)
+3. Selects values from each dropdown
+4. Verifies that the dropdowns have selected values
 
 ## Page Object Models
 
@@ -70,16 +104,16 @@ To run the login tests:
 npx playwright test tests/demo/login.spec.js
 ```
 
-To run the dashboard dropdown tests:
-
-```bash
-npx playwright test tests/demo/dashboard.spec.ts
-```
-
 To run the order tests:
 
 ```bash
 npx playwright test tests/demo/order.spec.js
+```
+
+To run the product tests:
+
+```bash
+npx playwright test tests/demo/viewAllProduct.spec.js
 ```
 
 To run all tests:
@@ -97,22 +131,24 @@ npx playwright test --ui
 To run a specific test:
 
 ```bash
-npx playwright test -g "Create Customer Dropdown"
+npx playwright test -g "Should navigate to View all products page"
 ```
 
-## Dashboard Dropdown Implementation
+## Orders Page Dropdown Implementation
 
-The dashboard dropdown functionality allows users to:
+The orders page dropdown functionality allows users to:
 
-1. Extract unique values from any column in the orders table
-2. Create a dropdown selection element with these values
-3. Filter the table based on the selected value
+1. Navigate to the List of Orders page
+2. Extract unique values from table columns (Customer, Product, Date, Status)
+3. Create dropdown selection elements with these values
+4. Select values from each dropdown
+5. Verify that the dropdowns have selected values
 
 This is implemented using Playwright's ability to:
 - Extract data from table columns
 - Create and inject HTML elements into the page
-- Add event listeners to handle dropdown selection changes
-- Filter table rows based on selected values
+- Select options from dropdown elements
+- Verify selected values
 
 ## Test Site
 
