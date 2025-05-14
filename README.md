@@ -9,6 +9,7 @@ This project demonstrates how to implement and test login functionality, dashboa
 - `/pages/products.js` - Page Object Model for the products page
 - `/tests/demo/login.spec.js` - Test cases for valid and invalid login scenarios
 - `/tests/demo/order.spec.js` - Test cases for order page functionality and dropdown selection
+- `/tests/demo/orders.spec.js` - Test cases for verifying the Web Orders page title
 - `/tests/demo/viewAllProduct.spec.js` - Test cases for the View all products page
 - `/tests/pages/login.ts` - Selectors for the login page elements
 - `/tests/pages/dashboard.ts` - Selectors for the dashboard page elements
@@ -69,6 +70,10 @@ The order.spec.js file implements the following functionality:
 3. Selects values from each dropdown
 4. Verifies that the dropdowns have selected values
 
+The orders.spec.js file implements the following test cases:
+1. **Verify the title of the Web Orders page** - Tests that the page title is correctly set to "Web Orders"
+2. **Verify the title after navigating to different sections** - Tests that the page title remains consistent when navigating between different sections of the application
+
 ## Page Object Models
 
 ### LoginPage (`/pages/login.js`)
@@ -108,6 +113,12 @@ To run the order tests:
 
 ```bash
 npx playwright test tests/demo/order.spec.js
+```
+
+To run the orders page title tests:
+
+```bash
+npx playwright test tests/demo/orders.spec.js
 ```
 
 To run the product tests:
