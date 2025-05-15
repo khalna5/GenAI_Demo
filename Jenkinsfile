@@ -34,7 +34,7 @@ steps {
 
 script {def changedFiles = sh(
 
-script: "git diff --name-only HEAD~1 HEAD"
+script: "git diff --name-only HEAD~1 HEAD",
 
 returnStdout: true
 
@@ -96,9 +96,7 @@ for (t in tests) {
 
 echo "Running test for: ${t}"
 
-sh "echo Running test logic for $t" actual test commands
-
-// Replace with
+sh "echo Running test logic for $t"
 
 }
 
