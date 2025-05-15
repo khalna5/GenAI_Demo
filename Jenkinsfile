@@ -70,11 +70,7 @@ steps {
 
 script {
 
-def tests = env.TEST_FILES.split('
-
-,
-
-')
+def tests = env.TEST_FILES.split(',')
 
 for (t in tests) {
 
