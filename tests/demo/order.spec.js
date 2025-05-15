@@ -16,7 +16,7 @@ test.describe('Orders Page Functionality', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/weborders/');
   });
 
-  test('Should go to List of Orders page and interact with all dropdowns', async ({ page }) => {
+  test('Should go to List of Orders page and interact with all dropdowns',  { tag: '@smoke' }, async ({ page }) => {
     // Step 1: Navigate to View all orders page (List of Orders page)
     await page.locator(orders.viewAllOrdersLink).click();
     
