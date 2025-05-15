@@ -16,7 +16,7 @@ test.describe('Login Functionality Tests', () => {
     // Valid credentials for the SmartBear demo site
     await loginPage.login('Tester', 'test');
     
- // Login SS
+ // success login
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/weborders/');
     await expect(loginPage.pageTitle).toContainText('Web Orders');
     
