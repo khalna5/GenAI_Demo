@@ -23,11 +23,11 @@ test.describe('Login Functionality Tests', () => {
     await expect(loginPage.logoutLink).toBeVisible();
   });
 
-  test('Wrong Username', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid login - Wrong Username', { tag: '@smoke' }, async ({ page }) => {
     // Login with invalid username
-    await loginPage.login('InvalidUser', 'test');
+    await loginPage.login('Invalid_User', 'test');
     
-    // Verify error message
+    // Verify the ERROR message 
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toHaveText('Invalid Login or Password.');
     
