@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/login';
 
 test.describe('Login Functionality Tests', () => {
+  testInfo.annotations.push({ type: 'tag', description: 'smoke' });
   let loginPage;
 
   test.beforeEach(async ({ page }) => {

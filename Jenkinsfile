@@ -4,6 +4,10 @@ pipeline {
     tools {
         nodejs 'NodeJS' // Use the NodeJS installation configured in Jenkins
     }
+
+    parameters { 
+        string(name: 'TEST_TAG', defaultValue: 'smoke', description: 'regression')
+    }
     
     stages {
         stage('Checkout') {
