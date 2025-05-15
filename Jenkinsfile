@@ -41,7 +41,7 @@ returnStdout: true
 ).trim().split("\n")
 echo "Changed files: ${changedFiles}"
 
-def testFiles = changedFiles.findAll { it.endsWith('.spec.js') }
+def testFiles = changedFiles.findAll { it.endsWith('.spec.js') || it.contains('test') }
 
 if (testFiles) {
 

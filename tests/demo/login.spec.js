@@ -13,10 +13,9 @@ test.describe('Login Functionality Tests', () => {
   });
 
   test('Should login successfully with correct credentials', { tag: '@smoke' }, async ({ page }) => {
-    // Valid credentials for the SmartBear demo site
+    // This test is for latest changes
     await loginPage.login('Tester', 'test');
     
- // success login
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/weborders/');
     await expect(loginPage.pageTitle).toContainText('Web Orders');
     
