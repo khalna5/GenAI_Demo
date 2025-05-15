@@ -30,7 +30,7 @@ pipeline {
         
         stage('Run Playwright Tests') {
             steps {
-                sh 'npx playwright test --project=chromium --grep ${params.TEST_TAG}'
+                sh "npx playwright test --project=chromium --grep '${params.TEST_TAG}'"
             }
         }
     }
