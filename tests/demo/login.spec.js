@@ -84,7 +84,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Logout Functionality', async ({ page }) => {
+  test('Logout Functionality',  { tag: '@smoke' }, async ({ page }) => {
     // First login successfully
     await loginPage.login('Tester', 'test');
     
