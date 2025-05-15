@@ -41,9 +41,7 @@ returnStdout: true
 ).trim().split("\n")
 echo "Changed files: ${changedFiles}"
 
-def testFiles = changedFiles.findAll { it.endsWith('.spec.js')
-
-|| it.contains('test') }
+def testFiles = changedFiles.findAll { it.endsWith('.spec.js') }
 
 if (testFiles) {
 
@@ -52,19 +50,14 @@ env.TEST_FILES = testFiles.join(',')
 echo "Tests to run: ${env.TEST_FILES}"
 
 } else {
-
 currentBuild.result ='SUCCESS'
 
 error("No relevant changes to test")
 
 }
-
 }
-
 }
-
 }
-
 stage('Run Selected Tests') {
 
 when {
