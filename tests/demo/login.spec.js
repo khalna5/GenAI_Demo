@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/login';
 
 test.describe('Login Functionality Tests', () => {
-  testInfo.annotations.push({ type: 'tag', description: 'smoke' });
   let loginPage;
 
   test.beforeEach(async ({ page }) => {
@@ -13,7 +12,7 @@ test.describe('Login Functionality Tests', () => {
     await loginPage.goToLoginPage();
   });
 
-  test('Valid Login - Should login successfully with correct credentials', async ({ page }) => {
+  test('smoke - Should login successfully with correct credentials', async ({ page }) => {
     // Valid credentials for the SmartBear demo site
     await loginPage.login('Tester', 'test');
     
@@ -25,7 +24,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(loginPage.logoutLink).toBeVisible();
   });
 
-  test('Invalid Login - Wrong Username', async ({ page }) => {
+  test('smoke - Wrong Username', async ({ page }) => {
     // Login with invalid username
     await loginPage.login('InvalidUser', 'test');
     
