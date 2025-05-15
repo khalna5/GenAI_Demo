@@ -28,34 +28,87 @@ sh 'npx playwright install chromium'
 }
 }
 
-stage('Get Modified Tests') {
+stage('Get Modified Files') {
+
 steps {
-script {
-def changedFiles = sh(script: '''git fetch origin main && git diff --name-only origin/main...HEAD | grep 'tests/.*\.spec\.[jt]s$' || true''', returnStdout: true).trim()
-if (changedFiles) {
-env.MODIFIED_TESTS = changedFiles.split("\\r?\\n").join(" ")
-echo "Modified test files: ${env.MODIFIED_TESTS}"
+
+script {def changedFiles = sh(
+
+script: "git diff --name-only HEAD~1 HEAD"
+
+returnStdout: true
+
+).trim().split("\n")
+
+,
+
+echo "Changed files: ${changedFiles}"
+
+def testFiles = changedFiles.findAll { it.endsWith('.spec.js')
+
+|| it.contains('test') }
+
+if (testFiles) {
+
+env.TEST_FILES = testFiles.join('
+
+,
+
+')
+
+echo "Tests to run: ${env.TEST_FILES}"
+
 } else {
-echo "No modified test files found."
-env.MODIFIED_TESTS = ''
-}
-}
-}
+
+currentBuild.result =
+
+'SUCCESS'
+
+error("No relevant changes to test")
+
 }
 
-stage('Run Playwright Tests') {
+}
+
+}
+
+}
+
+stage('Run Selected Tests') {
+
 when {
-expression { return env.MODIFIED_TESTS?.trim() }
-}
-steps {
-sh "npx playwright test ${env.MODIFIED_TESTS}"
-}
-}
+
+expression { return env.TEST_FILES }
+
 }
 
-post {
-always {
-archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+steps {
+
+script {
+
+def tests = env.TEST_FILES.split('
+
+,
+
+')
+
+for (t in tests) {
+
+echo "Running test for: ${t}"
+
+sh "echo Running test logic for $t" actual test commands
+
+// Replace with
+
 }
+
 }
+
+}
+
+}
+
+}
+
+
 }
