@@ -6,9 +6,9 @@ pipeline {
     }
 
     parameters { 
-        string(name: 'TEST_TAG', defaultValue: 'smoke', description: 'regression')
+        string(name: 'TEST_TAG', defaultValue: '@smoke', description: 'Enter the test tag to execute (e.g., @smoke, @regression, @api)')
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -30,7 +30,7 @@ pipeline {
         
         stage('Run Playwright Tests') {
             steps {
-                sh 'npx playwright test --project=chromium'
+                sh 'npx playwright test --project=chromium --grep ${params.TEST_TAG}'
             }
         }
     }

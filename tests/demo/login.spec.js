@@ -12,7 +12,7 @@ test.describe('Login Functionality Tests', () => {
     await loginPage.goToLoginPage();
   });
 
-  test('smoke - Should login successfully with correct credentials', async ({ page }) => {
+  test('Should login successfully with correct credentials', { tag: '@smoke' }, async ({ page }) => {
     // Valid credentials for the SmartBear demo site
     await loginPage.login('Tester', 'test');
     
@@ -24,7 +24,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(loginPage.logoutLink).toBeVisible();
   });
 
-  test('smoke - Wrong Username', async ({ page }) => {
+  test('Wrong Username', { tag: '@smoke' }, async ({ page }) => {
     // Login with invalid username
     await loginPage.login('InvalidUser', 'test');
     
