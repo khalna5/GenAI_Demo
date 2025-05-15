@@ -39,9 +39,6 @@ script: "git diff --name-only HEAD~1 HEAD",
 returnStdout: true
 
 ).trim().split("\n")
-
-,
-
 echo "Changed files: ${changedFiles}"
 
 def testFiles = changedFiles.findAll { it.endsWith('.spec.js')
@@ -50,19 +47,13 @@ def testFiles = changedFiles.findAll { it.endsWith('.spec.js')
 
 if (testFiles) {
 
-env.TEST_FILES = testFiles.join('
-
-,
-
-')
+env.TEST_FILES = testFiles.join(',')
 
 echo "Tests to run: ${env.TEST_FILES}"
 
 } else {
 
-currentBuild.result =
-
-'SUCCESS'
+currentBuild.result ='SUCCESS'
 
 error("No relevant changes to test")
 
