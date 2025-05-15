@@ -36,7 +36,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Wrong Password', async ({ page }) => {
+  test('Invalid Login - Wrong Password', { tag: '@smoke' }, async ({ page }) => {
     // Login with invalid password
     await loginPage.login('Tester', 'wrongpassword');
     
@@ -48,7 +48,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Username', async ({ page }) => {
+  test('Invalid Login - Empty Username', { tag: '@smoke' }, async ({ page }) => {
     // Login with empty username
     await loginPage.login('', 'test');
     
@@ -60,7 +60,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Password', async ({ page }) => {
+  test('Invalid Login - Empty Password', { tag: '@smoke' }, async ({ page }) => {
     // Login with empty password
     await loginPage.login('Tester', '');
     
