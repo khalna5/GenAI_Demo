@@ -31,8 +31,7 @@ sh 'npx playwright install chromium'
 stage('Get Modified Tests') {
 steps {
 script {
-// Capture modified test files
-def changedFiles = sh(script: "git fetch origin main && git diff --name-only origin/main...HEAD | grep 'tests/.*\\.spec\\.[jt]s$' || true", returnStdout: true).trim()
+def changedFiles = sh(script: '''git fetch origin main && git diff --name-only origin/main...HEAD | grep 'tests/.*\.spec\.[jt]s$' || true''', returnStdout: true).trim()
 if (changedFiles) {
 env.MODIFIED_TESTS = changedFiles.split("\\r?\\n").join(" ")
 echo "Modified test files: ${env.MODIFIED_TESTS}"
