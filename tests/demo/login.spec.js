@@ -60,7 +60,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Password', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid Login - Empty Password', async ({ page }) => {
     // Login with empty password
     await loginPage.login('Tester', '');
     
