@@ -39,16 +39,11 @@ test.describe('View All Products Page Tests', () => {
   });
 
   test('Should display products table with correct headers', async ({ page }) => {
-    // Navigate to View all products page
     await productsPage.goToProductsPage();
+        await expect(productsPage.productsTable).toBeVisible();
+        const expectedHeaders = ['Product name', 'Price', 'Discount'];
     
-    // Wait for the products table to be visible
-    await expect(productsPage.productsTable).toBeVisible();
-    
-    // Verify table headers
-    const expectedHeaders = ['Product name', 'Price', 'Discount'];
-    
-    // Check the number of headers
+    // Check headers numbers
     await expect(productsPage.tableHeaders).toHaveCount(expectedHeaders.length);
     
     // Check each header text
@@ -71,9 +66,7 @@ test.describe('View All Products Page Tests', () => {
     
     // Get all product details using the page object
     const actualProducts = await productsPage.getAllProductDetails();
-    
-    // Verify the number of products
-    expect(actualProducts.length).toBe(expectedProducts.length);
+        expect(actualProducts.length).toBe(expectedProducts.length);
     
     // Verify each product's information
     for (let i = 0; i < expectedProducts.length; i++) {
