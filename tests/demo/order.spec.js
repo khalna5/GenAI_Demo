@@ -19,19 +19,13 @@ test.describe('Orders Page Functionality', () => {
   test('Should go to List of Orders page and interact with all dropdowns',  { tag: '@smoke' }, async ({ page }) => {
     // Step 1: Navigate to View all orders page (List of Orders page)
     await page.locator(orders.viewAllOrdersLink).click();
-    
-    // Wait for the orders table to be visible
     await page.locator(orders.ordersTable).waitFor({ state: 'visible' });
     
     // Get the table headers to identify columns for filtering
     const headers = await page.locator(`${orders.ordersTable} th`).allTextContents();
     console.log('Table headers:', headers);
-    
-    // Create dynamic dropdowns for filtering based on table columns
-    // We'll create dropdowns for Name, Product, and Date columns
-    
+  
     // Step 2: Create and select from Customer dropdown
-    // First, extract unique customer names from the table
     const customerColumnIndex = headers.findIndex(header => header.includes('Name'));
     if (customerColumnIndex !== -1) {
       // Extract customer names from the table
