@@ -24,7 +24,7 @@ test.describe('Login Functionality Tests', () => {
   });
 
   test('Invalid login - Wrong Username', { tag: '@smoke' }, async ({ page }) => {
-    // Login with invalid username
+   // Login with valid creds
     await loginPage.login('Invalid_User', 'test');
     
     // Verify the ERROR message 
