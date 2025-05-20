@@ -32,7 +32,7 @@ pipeline {
             }
         }
 
-        stage('Get Modified Test Files') {
+        stage('Detect Modified Test Files') {
             steps {
                 script {
                     def changedFiles = sh(
@@ -46,11 +46,12 @@ pipeline {
                         it.endsWith('.spec.js') || it.contains('test')
                     }
 
-                    if (testFiles) {
+                    if (testFiles && testFiles.size() > 0) {
                         env.MODIFIED_TESTS = testFiles.join(',')
                         echo "Modified test files: ${env.MODIFIED_TESTS}"
                     } else {
                         echo "No modified test files detected."
+                        env.MODIFIED_TESTS = ''
                     }
                 }
             }
@@ -58,7 +59,7 @@ pipeline {
 
         stage('Run Modified Tests') {
             when {
-                expression { return env.MODIFIED_TESTS }
+                expression { return env.MODIFIED_TESTS?.trim() }
             }
             steps {
                 script {
@@ -71,9 +72,12 @@ pipeline {
             }
         }
 
-        stage('Run Tagged Tests') {
+        stage('Run Tagged Tests (Only if No Modified Tests)') {
+            when {
+                expression { return !env.MODIFIED_TESTS?.trim() }
+            }
             steps {
-                echo "Running all tests with tag: ${params.TEST_TAG}"
+                echo "No modified test files. Running tests with tag: ${params.TEST_TAG}"
                 sh "npx playwright test --grep '${params.TEST_TAG}' || true"
             }
         }
