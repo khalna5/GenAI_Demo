@@ -39,9 +39,9 @@ pipeline {
                         script: "git diff --name-only HEAD~1 HEAD",
                         returnStdout: true
                     ).trim().split("\n")
-                    
+
                     echo "Changed files: ${changedFiles}"
-                    
+
                     def testFiles = changedFiles.findAll {
                         it.endsWith('.spec.js') || it.contains('test')
                     }
@@ -56,22 +56,25 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Modified Tests') {
+            when {
+                expression { return env.MODIFIED_TESTS }
+            }
             steps {
                 script {
-                    if (env.MODIFIED_TESTS) {
-                        // Run only the modified tests, optionally with tag
-                        def testFiles = env.MODIFIED_TESTS.split(',')
-                        for (file in testFiles) {
-                            echo "Running modified test: ${file}"
-                            sh "npx playwright test ${file} --grep '${params.TEST_TAG}' || true"
-                        }
-                    } else {
-                        // No modified test files, fallback to tag-based run
-                        echo "No modified test files found. Running tests by tag: ${params.TEST_TAG}"
-                        sh "npx playwright test --grep '${params.TEST_TAG}'"
+                    def testFiles = env.MODIFIED_TESTS.split(',')
+                    for (file in testFiles) {
+                        echo "Running modified test: ${file}"
+                        sh "npx playwright test ${file} || true"
                     }
                 }
+            }
+        }
+
+        stage('Run Tagged Tests') {
+            steps {
+                echo "Running all tests with tag: ${params.TEST_TAG}"
+                sh "npx playwright test --grep '${params.TEST_TAG}' || true"
             }
         }
     }
