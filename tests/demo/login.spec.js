@@ -71,7 +71,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Username and Password', async ({ page }) => {
+  test('Invalid Login - Empty Username and Password', { tag: '@smoke' }, async ({ page }) => {
     // Login with empty username and password
     await loginPage.login('', '');
     
