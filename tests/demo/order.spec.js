@@ -315,7 +315,7 @@ test.describe('Orders Page Functionality', () => {
     // Navigate to View all orders page (List of Orders page)
     await page.locator(orders.viewAllOrdersLink).click();
     
-    // Wait for the orders table to be visible
+    // 
     await page.locator(orders.ordersTable).waitFor({ state: 'visible' });
     
     // Check if there are any existing dropdowns on the page
