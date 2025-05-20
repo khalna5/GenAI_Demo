@@ -6,7 +6,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_TAG', defaultValue: '@smoke', description: 'Tag for fallback tests if no test files changed')
+        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Tag for fallback tests if no test files changed')
     }
 
     stages {
@@ -48,7 +48,7 @@ pipeline {
                         env.TEST_FILES = testFiles.join(',')
                         echo "Detected test file changes: ${env.TEST_FILES}"
                     } else {
-                        env.TEST_MODE = 'SMOKE'
+                        env.TEST_MODE = 'risky'
                         echo "No test files modified. Will run tests tagged with '${params.TEST_TAG}'"
                     }
                 }
@@ -65,7 +65,7 @@ pipeline {
                             sh "npx playwright test ${f}"
                         }
                     } else {
-                        echo "Running smoke tests with tag ${params.TEST_TAG}"
+                        echo "Running risky tests with tag ${params.TEST_TAG}"
                         sh "npx playwright test --grep '${params.TEST_TAG}'"
                     }
                 }
