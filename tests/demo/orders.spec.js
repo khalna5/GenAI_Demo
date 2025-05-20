@@ -15,7 +15,6 @@ test.describe('Web Orders Page Title Verification', () => {
   });
 
   test('should verify the title of the Web Orders page', async ({ page }) => {
-    // Navigate to View all orders page
     await page.locator(orders.viewAllOrdersLink).click();
     
     //Verify the Title of the page
