@@ -13,7 +13,7 @@ test.describe('Login Functionality Tests', () => {
   });
 
   test('Should login successfully with correct credentials', { tag: '@risky' }, async ({ page }) => {
-    // This test is for latest changes
+    //Success test 
     await loginPage.login('Tester', 'test');
     
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/weborders/');
