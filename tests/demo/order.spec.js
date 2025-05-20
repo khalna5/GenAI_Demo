@@ -326,7 +326,7 @@ test.describe('Orders Page Functionality', () => {
     for (let i = 0; i < existingDropdowns.length; i++) {
       const dropdown = existingDropdowns[i];
       
-      // Get all options in the dropdown
+      // Get all options of dropdown
       const options = await dropdown.locator('option').all();
       
       // If there are options other than the default, select the first non-default option
