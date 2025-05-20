@@ -6,11 +6,12 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Enter test tag (e.g., @risky, @regression)')
+        choice(name: 'TEST_MODE', choices: ['modified', 'tag'], description: 'Choose whether to run modified files or tag-based tests')
+        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Tag for test selection (used only if TEST_MODE=tag)')
     }
 
     environment {
-        PUSH_TO_GITHUB = false
+        PUSH_TO_GITHUB = 'false'
     }
 
     stages {
@@ -26,51 +27,51 @@ pipeline {
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Install Playwright Chromium') {
             steps {
-                sh 'npx playwright test ${t} --project=chromium'
+                sh 'npx playwright install chromium'
             }
         }
 
-        stage('Determine Test Scope') {
+        stage('Determine Tests to Run') {
             steps {
                 script {
-                    def changedFiles = sh(
-                        script: "git diff --name-only HEAD~1 HEAD",
-                        returnStdout: true
-                    ).trim().split("\n")
+                    if (params.TEST_MODE == 'modified') {
+                        def changedFiles = sh(
+                            script: "git diff --name-only HEAD~1 HEAD",
+                            returnStdout: true
+                        ).trim().split("\n")
 
-                    echo "Changed files: ${changedFiles}"
+                        def testFiles = changedFiles.findAll { 
+                            it.endsWith('.spec.js') || it.contains('test')
+                        }
 
-                    def testFiles = changedFiles.findAll { 
-                        it.endsWith('.spec.js') || it.contains('test')
-                    }
-
-                    if (testFiles && testFiles.size() > 0) {
-                        env.TEST_MODE = "modified"
-                        env.TEST_FILES = testFiles.join(',')
-                        echo "Modified test files to run: ${env.TEST_FILES}"
+                        if (testFiles && testFiles.size() > 0) {
+                            env.TEST_FILES = testFiles.join(',')
+                            env.PUSH_TO_GITHUB = 'true'
+                            echo "Modified test files: ${env.TEST_FILES}"
+                        } else {
+                            currentBuild.result = 'SUCCESS'
+                            error("No modified test files found.")
+                        }
                     } else {
-                        env.TEST_MODE = "tag"
-                        echo "No modified test files. Will run tests with tag: ${params.TEST_TAG}"
+                        echo "Running tests with tag: ${params.TEST_TAG}"
                     }
                 }
             }
         }
 
-        stage('Run Selected Tests') {
+        stage('Run Tests') {
             steps {
                 script {
-                    if (env.TEST_MODE == "modified") {
+                    if (params.TEST_MODE == 'modified') {
                         def tests = env.TEST_FILES.split(',')
                         for (t in tests) {
                             echo "Running modified test: ${t}"
-                            sh "npx playwright test ${t}"
+                            sh "npx playwright test ${t} --project=chromium"
                         }
-                        env.PUSH_TO_GITHUB = true
                     } else {
-                        echo "Running tests with tag ${params.TEST_TAG}"
-                        sh "npx playwright test --grep '${params.TEST_TAG}'"
+                        sh "npx playwright test --grep '${params.TEST_TAG}' --project=chromium"
                     }
                 }
             }
@@ -78,7 +79,7 @@ pipeline {
 
         stage('Push to GitHub') {
             when {
-                expression { return env.PUSH_TO_GITHUB == "true" }
+                expression { return env.PUSH_TO_GITHUB == 'true' }
             }
             steps {
                 script {
@@ -86,11 +87,10 @@ pipeline {
                         git config user.name "jenkins-bot"
                         git config user.email "jenkins@example.com"
                         git add .
-                        git commit -m "Auto: Update after modified test run"
+                        git diff --cached --quiet || git commit -m "Auto: Commit from Jenkins modified test run"
                         git push origin HEAD:main
                     '''
                 }
             }
         }
     }
-}
