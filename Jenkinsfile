@@ -67,14 +67,3 @@ sh "echo Running test logic for $t"
 }
 }
 }
-
-        stage('Run Tagged Tests (Only if No Modified Tests)') {
-            when {
-                expression { return !env.TEST_FILES?.trim() }
-            }
-            steps {
-                echo "No modified test files. Running tests with tag: ${params.TEST_TAG}"
-                sh "npx playwright test --grep '${params.TEST_TAG}' || true"
-            }
-        }
-    
