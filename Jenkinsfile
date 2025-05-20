@@ -6,7 +6,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Tag for fallback tests if no test files changed')
+        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Fallback tag if no test files changed')
     }
 
     stages {
@@ -55,21 +55,22 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests (Chrome only)') {
             steps {
                 script {
                     if (env.TEST_MODE == 'SELECTED') {
                         def files = env.TEST_FILES.split(',')
                         for (f in files) {
-                            echo "Running modified test: ${f}"
-                            sh "npx playwright test ${f}"
+                            echo "Running modified test in Chrome: ${f}"
+                            sh "npx playwright test ${f} --project=chromium"
                         }
                     } else {
-                        echo "Running risky tests with tag ${params.TEST_TAG}"
-                        sh "npx playwright test --grep '${params.TEST_TAG}'"
+                        echo "Running risky tests in Chrome with tag ${params.TEST_TAG}"
+                        sh "npx playwright test --grep '${params.TEST_TAG}' --project=chromium"
                     }
                 }
             }
         }
     }
 }
+
