@@ -84,8 +84,6 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        git config user.name "jenkins-bot"
-                        git config user.email "jenkins@example.com"
                         git add .
                         git diff --cached --quiet || git commit -m "Auto: Commit from Jenkins modified test run"
                         git push origin HEAD:main
