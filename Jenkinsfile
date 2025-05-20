@@ -32,45 +32,51 @@ pipeline {
             }
         }
 
-        stage('Detect Modified Test Files') {
-            steps {
-                script {
-                    def changedFiles = sh(
-                        script: "git diff --name-only HEAD~1 HEAD",
-                        returnStdout: true
-                    ).trim().split("\n")
+    stage('Detect Modified Test Files') {
+    steps {
+        script {
+            sh 'git fetch origin main'
 
-                    echo "Changed files: ${changedFiles}"
+            // DO NOT use `def` if you want to pass values across stages
+            def rawFiles = sh(
+                script: "git diff --name-only origin/main...HEAD",
+                returnStdout: true
+            ).trim()
 
-                    def testFiles = changedFiles.findAll {
-                        it.endsWith('.spec.js') || it.contains('test')
-                    }
+            echo "Raw changed files: ${rawFiles}"
 
-                    if (testFiles && testFiles.size() > 0) {
-                        env.MODIFIED_TESTS = testFiles.join(',')
-                        echo "Modified test files: ${env.MODIFIED_TESTS}"
-                    } else {
-                        echo "No modified test files detected."
-                        env.MODIFIED_TESTS = ''
-                    }
-                }
+            def testFiles = rawFiles.split("\n").findAll {
+                it.endsWith('.spec.js') || it.toLowerCase().contains('test')
+            }
+
+            if (testFiles && testFiles.size() > 0) {
+                env.MODIFIED_TESTS = testFiles.join(',')
+                echo "Modified test files: ${env.MODIFIED_TESTS}"
+            } else {
+                env.MODIFIED_TESTS = ''
+                echo "No modified test files detected."
             }
         }
+    }
+}
 
-        stage('Run Modified Tests') {
-            when {
-                expression { return env.MODIFIED_TESTS?.trim() }
-            }
-            steps {
-                script {
-                    def testFiles = env.MODIFIED_TESTS.split(',')
-                    for (file in testFiles) {
-                        echo "Running modified test: ${file}"
-                        sh "npx playwright test ${file} || true"
-                    }
-                }
+stage('Run Modified Tests') {
+    when {
+        expression {
+            echo "Evaluating MODIFIED_TESTS: ${env.MODIFIED_TESTS}"
+            return env.MODIFIED_TESTS?.trim()
+        }
+    }
+    steps {
+        script {
+            def testFiles = env.MODIFIED_TESTS.split(',')
+            for (file in testFiles) {
+                echo "Running modified test: ${file}"
+                sh "npx playwright test ${file} || true"
             }
         }
+    }
+}
 
         stage('Run Tagged Tests (Only if No Modified Tests)') {
             when {
