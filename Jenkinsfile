@@ -1,69 +1,76 @@
 pipeline {
-agent any
+    agent any
 
-tools {
-nodejs 'NodeJS'
-}
+    tools {
+        nodejs 'NodeJS'
+    }
 
-parameters {
-string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Enter test tag (e.g., @risky, @regression)')
-}
+    parameters {
+        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Enter test tag (e.g., @risky, @regression)')
+    }
 
-stages {
-stage('Checkout') {
-steps {
-checkout scm
-}
-}
+    environment {
+        TEST_FILES = ''
+        SHOULD_RUN_RISKY = 'false'
+    }
 
-stage('Install Dependencies') {
-steps {
-sh 'npm ci'
-}
-}
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-stage('Install Playwright Browsers') {
-steps {
-sh 'npx playwright install chromium'
-}
-}
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
 
-stage('Get Modified Files') {
-steps {
+        stage('Install Playwright Browsers') {
+            steps {
+                sh 'npx playwright install chromium'
+            }
+        }
 
-script {def changedFiles = sh(
-script: "git diff --name-only HEAD~1 HEAD",
-returnStdout: true
-).trim().split("\n")
-echo "Changed files: ${changedFiles}"
+        stage('Get Modified Files') {
+            steps {
+                script {
+                    def changedFiles = sh(
+                        script: "git diff --name-only HEAD~1 HEAD",
+                        returnStdout: true
+                    ).trim().split("\n")
 
-def testFiles = changedFiles.findAll { it.endsWith('.spec.js') || it.contains('test') }
+                    echo "Changed files: ${changedFiles}"
 
-if (testFiles) {
-env.TEST_FILES = testFiles.join(',')
-echo "Tests to run: ${env.TEST_FILES}"
-} else {
-currentBuild.result ='SUCCESS'
-error("No relevant changes to test")
-}
-}
-}
-}
+                    def testFiles = changedFiles.findAll { it.endsWith('.spec.js') || it.contains('test') }
 
-stage('Run Selected Tests') {
-when {
-expression { return env.TEST_FILES }
-}
+                    if (testFiles && testFiles.size() > 0) {
+                        env.TEST_FILES = testFiles.join(',')
+                        echo "Tests to run: ${env.TEST_FILES}"
+                    } else {
+                        echo "No modified test files found. Will run tests with tag: ${params.TEST_TAG}"
+                        env.SHOULD_RUN_RISKY = 'true'
+                    }
+                }
+            }
+        }
 
-steps {
-script {
-def tests = env.TEST_FILES.split(',')
-for (t in tests) {
-echo "Running test for: ${t}"
-sh "echo Running test logic for $t"
-}
-}
-}
-}
-}
+        stage('Run Selected Tests') {
+            steps {
+                script {
+                    if (env.SHOULD_RUN_RISKY == 'true') {
+                        echo "Running tests with tag: ${params.TEST_TAG}"
+                        sh "npx playwright test --grep '${params.TEST_TAG}'"
+                    } else {
+                        def tests = env.TEST_FILES.split(',')
+                        for (t in tests) {
+                            echo "Running test: ${t}"
+                            sh "npx playwright test ${t}"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
