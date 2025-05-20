@@ -22,7 +22,7 @@ test.describe('Web Orders Page Title Verification', () => {
     expect(pageTitle).toBe('Web Orders');
     console.log(`Verified page title: ${pageTitle}`);
     
-    // Additional verification: to check the header of the page
+    // Additional verification: To check the header of the page
     const heading = await page.locator('h2').textContent();
     expect(heading).toContain('List of All Orders');
     console.log(`Verified page heading: ${heading}`);
