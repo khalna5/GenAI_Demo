@@ -6,7 +6,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_TAG', defaultValue: '@risky', description: 'Enter test tag (e.g., @risky, @regression)')
+        string(name: 'TEST_TAG', defaultValue: '@smoke', description: 'Tag for fallback tests if no test files changed')
     }
 
     stages {
@@ -39,35 +39,37 @@ pipeline {
 
                     echo "Changed files: ${changedFiles}"
 
-                    def testFiles = changedFiles.findAll { 
-                        it.endsWith('.spec.js') || it.contains('test') 
+                    def testFiles = changedFiles.findAll {
+                        it.endsWith('.spec.js') || it.contains('test')
                     }
 
-                    if (testFiles) {
+                    if (testFiles && testFiles.size() > 0) {
+                        env.TEST_MODE = 'SELECTED'
                         env.TEST_FILES = testFiles.join(',')
-                        echo "Tests to run: ${env.TEST_FILES}"
+                        echo "Detected test file changes: ${env.TEST_FILES}"
                     } else {
-                        currentBuild.result = 'SUCCESS'
-                        error("No relevant changes to test")
+                        env.TEST_MODE = 'SMOKE'
+                        echo "No test files modified. Will run tests tagged with '${params.TEST_TAG}'"
                     }
                 }
             }
         }
 
-        stage('Run Selected Tests') {
-            when {
-                expression { return env.TEST_FILES }
-            }
+        stage('Run Tests') {
             steps {
                 script {
-                    def tests = env.TEST_FILES.split(',')
-                    for (t in tests) {
-                        echo "Running test for: ${t}"
-                        sh "echo Running test logic for ${t}"
+                    if (env.TEST_MODE == 'SELECTED') {
+                        def files = env.TEST_FILES.split(',')
+                        for (f in files) {
+                            echo "Running modified test: ${f}"
+                            sh "npx playwright test ${f}"
+                        }
+                    } else {
+                        echo "Running smoke tests with tag ${params.TEST_TAG}"
+                        sh "npx playwright test --grep '${params.TEST_TAG}'"
                     }
                 }
             }
         }
     }
 }
-
