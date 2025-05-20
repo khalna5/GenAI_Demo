@@ -4,7 +4,7 @@ import { orders } from '../pages/orders';
 
 test.describe('Web Orders Page Title Verification', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the Web Orders page
+    // Navigate to the Web Orders Page
     await page.goto('');
 
     await page.locator(login.username).fill('Tester');
