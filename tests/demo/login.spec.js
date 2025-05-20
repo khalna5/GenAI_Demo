@@ -60,7 +60,7 @@ test.describe('Login Functionality Tests', () => {
   });
 
   test('Invalid Login - Empty Password', async ({ page }) => {
-    // Login with empty password
+    // Login with empty Pass
     await loginPage.login('Tester', '');
     
     // Verify error message
