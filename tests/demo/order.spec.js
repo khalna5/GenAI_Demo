@@ -98,7 +98,7 @@ test.describe('Orders Page Functionality', () => {
         cells => [...new Set(cells.map(cell => cell.textContent.trim()))]
       );
       
-      // Create a product dropdown if it doesn't exist
+      // Create a product dropdown if it isn't exist
       await page.evaluate((productNames) => {
         if (!document.getElementById('productDropdown')) {
           const container = document.createElement('div');
