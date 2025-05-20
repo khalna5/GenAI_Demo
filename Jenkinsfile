@@ -56,20 +56,20 @@ pipeline {
             }
         }
 
-        stage('Run Selected Tests') {
-            steps {
-                script {
-                    if (env.SHOULD_RUN_RISKY == 'true') {
-                        echo "Running tests with tag: ${params.TEST_TAG}"
-                        sh "npx playwright test --grep '${params.TEST_TAG}'"
-                    } else {
-                        def tests = env.TEST_FILES.split(',')
-                        for (t in tests) {
-                            echo "Running test: ${t}"
-                            sh "npx playwright test ${t}"
-                        }
-                    }
+    stage('Run Selected Tests') {
+    steps {
+        script {
+            if (env.SHOULD_RUN_RISKY == 'true') {
+                echo "Running tests with tag: ${params.TEST_TAG}"
+                sh "npx playwright test --grep '${params.TEST_TAG}'"
+            } else if (env.TEST_FILES?.trim()) {
+                def tests = env.TEST_FILES.split(',')
+                for (t in tests) {
+                    echo "Running test: ${t}"
+                    sh "npx playwright test ${t}"
                 }
+            } else {
+                echo "No tests to run."
             }
         }
     }
