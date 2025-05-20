@@ -93,3 +93,20 @@ pipeline {
         }
     }
 }
+stage('Run @risky Tests') {
+    steps {
+        sh "npx playwright test --grep '@risky' --project=chromium"
+    }
+}
+
+stage('Push to GitHub') {
+    steps {
+        script {
+            sh '''
+                git add .
+                git diff --cached --quiet || git commit -m "Auto: Commit after running @risky tests"
+                git push origin HEAD:main
+            '''
+        }
+    }
+}
