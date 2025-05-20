@@ -12,7 +12,7 @@ test.describe('Login Functionality Tests', () => {
     await loginPage.goToLoginPage();
   });
 
-  test('Should login successfully with correct credentials', { tag: '@smoke' }, async ({ page }) => {
+  test('Should login successfully with correct credentials', { tag: '@risky' }, async ({ page }) => {
     // This test is for latest changes
     await loginPage.login('Tester', 'test');
     
@@ -23,7 +23,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(loginPage.logoutLink).toBeVisible();
   });
 
-  test('Invalid login - Wrong Username', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid login - Wrong Username', { tag: '@risky' }, async ({ page }) => {
    // Login with valid creds
     await loginPage.login('Invalid_User', 'test');
     
@@ -35,7 +35,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Wrong Password', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid Login - Wrong Password', async ({ page }) => {
     // Login with invalid password
     await loginPage.login('Tester', 'wrongpassword');
     
@@ -47,7 +47,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Username', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid Login - Empty Username', async ({ page }) => {
     // Login with empty username
     await loginPage.login('', 'test');
     
@@ -71,7 +71,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Invalid Login - Empty Username and Password', { tag: '@smoke' }, async ({ page }) => {
+  test('Invalid Login - Empty Username and Password', { tag: '@risky' }, async ({ page }) => {
     // Login with empty username and password
     await loginPage.login('', '');
     
@@ -83,7 +83,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
-  test('Logout Functionality',  { tag: '@smoke' }, async ({ page }) => {
+  test('Logout Functionality',  async ({ page }) => {
     // First login successfully
     await loginPage.login('Tester', 'test');
     
