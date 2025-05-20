@@ -17,7 +17,7 @@ test.describe('Web Orders Page Title Verification', () => {
   test('should verify the title of the Web Orders page', async ({ page }) => {
     await page.locator(orders.viewAllOrdersLink).click();
     
-    //Verify the pages title
+    //Verify the titles page
     const pageTitle = await page.title();
     expect(pageTitle).toBe('Web Orders');
     console.log(`Verified page title: ${pageTitle}`);
