@@ -68,7 +68,7 @@ test.describe('View All Products Page Tests', () => {
     const actualProducts = await productsPage.getAllProductDetails();
         expect(actualProducts.length).toBe(expectedProducts.length);
     
-    // Verify each product's information
+    //Verify the prod info
     for (let i = 0; i < expectedProducts.length; i++) {
       expect(actualProducts[i].name).toContain(expectedProducts[i].name);
       expect(actualProducts[i].price).toContain(expectedProducts[i].price);
