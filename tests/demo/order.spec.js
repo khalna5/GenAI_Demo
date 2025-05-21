@@ -92,7 +92,7 @@ test.describe('Orders Page Functionality', () => {
     // Step 3: Create and select from Product dropdown
     const productColumnIndex = headers.findIndex(header => header.includes('Product'));
     if (productColumnIndex !== -1) {
-      // Extract product names 
+    
       const productNames = await page.$$eval(
         `${orders.ordersTable} tr:not(:first-child) td:nth-child(${productColumnIndex + 1})`,
         cells => [...new Set(cells.map(cell => cell.textContent.trim()))]
