@@ -8,7 +8,7 @@ test.describe('Login Functionality Tests', () => {
     // Initialize the LoginPage for each test
     loginPage = new LoginPage(page);
     
-    // Navigate to the login page before each test
+    // Navigate login page before each test
     await loginPage.goToLoginPage();
   });
 
