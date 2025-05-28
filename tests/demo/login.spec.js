@@ -26,7 +26,7 @@ test.describe('Login Functionality Tests', () => {
    // Login with valid creds
     await loginPage.login('Invalid_User', 'test');
     
-    // Verify the ERROR message 
+    // Verify error M
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toHaveText('Invalid Login or Password.');
     
