@@ -142,7 +142,7 @@ test.describe('Orders Page Functionality', () => {
         }
       }, productNames);
       
-      // Select a product from the dropdown
+      // Select a productsfrom the dropdown
       const productDropdown = page.locator('#productDropdown');
       await expect(productDropdown).toBeVisible();
       

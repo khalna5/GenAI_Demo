@@ -19,7 +19,6 @@ test.describe('Login Functionality Tests', () => {
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/weborders/');
     await expect(loginPage.pageTitle).toContainText('Web Orders');
     
-    // Verify logout link is visible
     await expect(loginPage.logoutLink).toBeVisible();
   });
 
