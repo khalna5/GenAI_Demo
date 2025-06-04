@@ -48,7 +48,7 @@ test.describe('Orders Page Functionality', () => {
           const select = document.createElement('select');
           select.id = 'customerDropdown';
           
-          // Add default dropdown
+          // Add default dropdown options
           const defaultOption = document.createElement('option');
           defaultOption.value = '';
           defaultOption.textContent = '-- Select Customer --';

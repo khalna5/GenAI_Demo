@@ -30,7 +30,7 @@ test.describe('Login Functionality Tests', () => {
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toHaveText('Invalid Login or Password.');
     
-    // Verify we're still on the login page
+    // Verify
     await expect(page).toHaveURL('http://secure.smartbearsoftware.com/samples/testcomplete12/WebOrders/login.aspx');
   });
 
