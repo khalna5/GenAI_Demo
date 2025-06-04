@@ -54,7 +54,6 @@ pipeline {
                 }
             }
         }
-        //
         stage('Run Tests (Chrome only)') {
             steps {
                 script {
